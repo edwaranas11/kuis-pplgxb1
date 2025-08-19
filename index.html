@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kuis PPLG - Multi Topik</title>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f7f9;
+      color: #333;
+    }
+    header {
+      text-align: center;
+      padding: 20px;
+      background-color: #1e3a8a;
+      color: white;
+    }
+    header img {
+      width: 80px;
+      margin-bottom: 10px;
+    }
+    .container {
+      max-width: 800px;
+      margin: 20px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      color: #1e3a8a;
+    }
+    .question {
+      margin-bottom: 20px;
+    }
+    .options label {
+      display: block;
+      padding: 10px;
+      border: 1px solid #ccc;
+      margin-bottom: 5px;
+      border-radius: 5px;
+      cursor: pointer;
+      background-color: #f9f9f9;
+      transition: background 0.2s;
+    }
+    .options label:hover {
+      background-color: #e0e7ff;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin-top: 20px;
+      border: none;
+      border-radius: 5px;
+      background-color: #1e3a8a;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #3749a2;
+    }
+    .result {
+      margin-top: 30px;
+      padding: 20px;
+      background-color: #d1fae5;
+      border-left: 5px solid #10b981;
+      border-radius: 5px;
+      display: none;
+    }
+    .correct {
+      background-color: #d1fae5;
+      border-color: #10b981;
+    }
+    .incorrect {
+      background-color: #fee2e2;
+      border-color: #ef4444;
+    }
+    .feedback {
+      font-weight: bold;
+      margin-top: 5px;
+    }
+    @media screen and (max-width: 600px) {
+      .container {
+        margin: 10px;
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="https://edwaranas11.github.io/soal-pplg1/LOGO%20SMK.png" alt="Logo Sekolah" />
+    <h1>Kuis PPLG - Multi Topik</h1>
+    <p>Oleh Edwar Anas, S.Kom</p>
+  </header>
+
+  <div class="container" id="quiz-container">
+    <form id="quizForm"></form>
+    <div class="result" id="resultBox"></div>
+    <button type="button" onclick="submitQuiz()">Selesai</button>
+    <button type="button" onclick="location.reload()" style="display: none;" id="retryBtn">Coba Lagi</button>
+  </div>
+
+  <script>
+    const questions = [
+      // Internet of Things (IoT)
+      { question: "1. Apa yang dimaksud dengan Internet of Things (IoT)?", options: ["Teknologi penyimpanan awan", "Jaringan perangkat yang saling terhubung dan dapat bertukar data", "Sistem keamanan siber", "Aplikasi media sosial"], answer: 1 },
+      { question: "2. Contoh penerapan IoT dalam kehidupan sehari-hari adalah…", options: ["Mesin tik", "Smart home dan smart farming", "Ponsel jadul", "Kalkulator"], answer: 1 },
+      { question: "3. Salah satu tantangan utama dalam implementasi IoT adalah…", options: ["Biaya aplikasi", "Koneksi internet lambat & keamanan data", "Sulit membuat website", "Kurangnya listrik"], answer: 1 },
+
+      // Fintech
+      { question: "4. Contoh layanan Fintech populer di Indonesia adalah…", options: ["Netflix", "Gojek & OVO", "Wikipedia", "Microsoft Word"], answer: 1 },
+      { question: "5. Manfaat utama Fintech bagi masyarakat adalah…", options: ["Mempermudah transaksi & meningkatkan inklusi keuangan", "Menghapus peran bank sepenuhnya", "Mengurangi internet", "Hanya untuk perusahaan besar"], answer: 0 },
+      { question: "6. Inovasi keuangan digital yang menggunakan teknologi blockchain adalah…", options: ["Mobile Banking", "QRIS", "Cryptocurrency", "E-commerce"], answer: 2 },
+
+      // Green Technology
+      { question: "7. Tujuan utama green technology adalah…", options: ["Meningkatkan penggunaan bahan bakar fosil", "Mengurangi dampak negatif terhadap lingkungan", "Memperbanyak limbah industri", "Mempercepat kerusakan alam"], answer: 1 },
+      { question: "8. Contoh teknologi ramah lingkungan yang digunakan untuk menghasilkan listrik adalah…", options: ["Pembangkit listrik tenaga uap batubara", "Panel surya", "Mesin diesel", "Generator bensin"], answer: 1 },
+      { question: "9. Salah satu prinsip sustainability adalah…", options: ["Konsumsi sumber daya tanpa batas", "Mengelola sumber daya agar tetap tersedia untuk generasi mendatang", "Membuang limbah sembarangan", "Menggunakan teknologi hanya untuk industri besar"], answer: 1 },
+
+      // Tren Masa Depan
+      { question: "10. Salah satu tren teknologi masa depan yang banyak dibicarakan adalah…", options: ["Mesin tik", "Kecerdasan buatan (AI)", "Pager", "Fax"], answer: 1 },
+      { question: "11. Mengapa AR dan VR diprediksi berkembang pesat?", options: ["Karena hanya untuk game", "Karena dapat digunakan di banyak bidang seperti pendidikan, kesehatan, hiburan", "Karena murah", "Karena tidak butuh listrik"], answer: 1 },
+      { question: "12. Teknologi 5G berperan penting karena…", options: ["Mengurangi listrik", "Memberikan kecepatan internet tinggi & stabil", "Menghapus Wi-Fi", "Menggantikan satelit"], answer: 1 },
+
+      // Cloud Computing
+      { question: "13. Cloud computing adalah…", options: ["Penyimpanan data di perangkat pribadi", "Layanan penyimpanan & pengolahan data melalui internet", "Teknologi menonton TV", "Keamanan jaringan lokal"], answer: 1 },
+      { question: "14. Keuntungan cloud computing bagi perusahaan adalah…", options: ["Menghemat biaya infrastruktur & fleksibilitas akses data", "Membuat server lebih mahal", "Tidak bisa diakses online", "Hanya untuk game"], answer: 0 },
+      { question: "15. Contoh penyedia layanan cloud computing adalah…", options: ["WhatsApp", "Dropbox & Google Drive", "Photoshop", "Mozilla Firefox"], answer: 1 },
+
+      // Digital Marketing
+      { question: "16. Strategi digital marketing yang memanfaatkan mesin pencari adalah…", options: ["SEO", "Social Media Marketing", "Email Marketing", "Influencer Marketing"], answer: 0 },
+      { question: "17. Kelebihan digital marketing dibanding pemasaran tradisional adalah…", options: ["Jangkauan terbatas", "Biaya lebih tinggi", "Mudah diukur dan lebih luas jangkauannya", "Tidak butuh internet"], answer: 2 },
+      { question: "18. Iklan berbayar di Google disebut…", options: ["Google Drive", "Google Ads", "Google Maps", "Google Docs"], answer: 1 },
+
+      // Web Development
+      { question: "19. Bahasa utama untuk membuat tampilan website adalah…", options: ["Python", "HTML, CSS, dan JavaScript", "C++", "SQL"], answer: 1 },
+      { question: "20. Perbedaan front-end dan back-end development adalah…", options: ["Front-end untuk server, back-end untuk tampilan", "Front-end untuk tampilan, back-end untuk server & database", "Keduanya hanya untuk desain grafis", "Tidak ada perbedaan"], answer: 1 },
+      { question: "21. Framework back-end populer untuk Node.js adalah…", options: ["React", "Vue.js", "Express.js", "Bootstrap"], answer: 2 }
+    ];
+
+    const quizForm = document.getElementById("quizForm");
+    questions.forEach((q, index) => {
+      const div = document.createElement("div");
+      div.className = "question";
+      div.innerHTML = `<h2>${q.question}</h2><div class="options">` +
+        q.options.map((opt, i) => `
+          <label>
+            <input type="radio" name="q${index}" value="${i}"/> ${opt}
+          </label>`).join("") +
+        `</div><div class="feedback" id="feedback${index}"></div>`;
+      quizForm.appendChild(div);
+    });
+
+    function submitQuiz() {
+      const answers = questions.map((_, i) =>
+        document.querySelector(`input[name="q${i}"]:checked`)
+      );
+
+      if (answers.includes(null)) {
+        alert("Silakan jawab semua soal terlebih dahulu!");
+        return;
+      }
+
+      let score = 0;
+      answers.forEach((ans, i) => {
+        const correct = questions[i].answer;
+        const feedbackEl = document.getElementById(`feedback${i}`);
+        const labels = document.querySelectorAll(`input[name="q${i}"]`);
+
+        labels.forEach(input => {
+          const label = input.closest("label");
+          label.classList.remove("correct", "incorrect");
+          if (parseInt(input.value) === correct) {
+            label.classList.add("correct");
+          }
+        });
+
+        if (parseInt(ans.value) === correct) {
+          score++;
+          feedbackEl.textContent = "✔ Benar";
+          feedbackEl.style.color = "green";
+        } else {
+          feedbackEl.textContent = `✖ Salah. Jawaban yang benar: ${questions[i].options[correct]}`;
+          feedbackEl.style.color = "red";
+          ans.closest("label").classList.add("incorrect");
+        }
+      });
+
+      const resultBox = document.getElementById("resultBox");
+      resultBox.style.display = "block";
+      resultBox.innerHTML = `<strong>Skor Kamu: ${score} / ${questions.length}</strong><br>Terus semangat belajar ya!`;
+
+      document.querySelector("button[onclick='submitQuiz()']").style.display = "none";
+      document.getElementById("retryBtn").style.display = "inline-block";
+    }
+  </script>
+</body>
+</html>
