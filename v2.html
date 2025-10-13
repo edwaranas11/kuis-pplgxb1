@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kuis PPLG - Multi Topik</title>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f7f9;
+      color: #333;
+    }
+    header {
+      text-align: center;
+      padding: 20px;
+      background-color: #1e3a8a;
+      color: white;
+    }
+    header img {
+      width: 80px;
+      margin-bottom: 10px;
+    }
+    .container {
+      max-width: 800px;
+      margin: 20px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      color: #1e3a8a;
+    }
+    .question {
+      margin-bottom: 20px;
+    }
+    .options label {
+      display: block;
+      padding: 10px;
+      border: 1px solid #ccc;
+      margin-bottom: 5px;
+      border-radius: 5px;
+      cursor: pointer;
+      background-color: #f9f9f9;
+      transition: background 0.2s;
+    }
+    .options label:hover {
+      background-color: #e0e7ff;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin-top: 20px;
+      border: none;
+      border-radius: 5px;
+      background-color: #1e3a8a;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #3749a2;
+    }
+    .result {
+      margin-top: 30px;
+      padding: 20px;
+      background-color: #d1fae5;
+      border-left: 5px solid #10b981;
+      border-radius: 5px;
+      display: none;
+    }
+    .correct {
+      background-color: #d1fae5;
+      border-color: #10b981;
+    }
+    .incorrect {
+      background-color: #fee2e2;
+      border-color: #ef4444;
+    }
+    .feedback {
+      font-weight: bold;
+      margin-top: 5px;
+    }
+    @media screen and (max-width: 600px) {
+      .container {
+        margin: 10px;
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="https://edwaranas11.github.io/soal-pplg1/LOGO%20SMK.png" alt="Logo Sekolah" />
+    <h1>Kuis PPLG - Multi Topik</h1>
+    <p>Oleh Edwar Anas, S.Kom</p>
+  </header>
+
+  <div class="container" id="quiz-container">
+    <form id="quizForm"></form>
+    <div class="result" id="resultBox"></div>
+    <button type="button" onclick="submitQuiz()">Selesai</button>
+    <button type="button" onclick="location.reload()" style="display: none;" id="retryBtn">Coba Lagi</button>
+  </div>
+
+  <script>
+    const questions = [
+      // 📊 Business Intelligence & Analytic Business
+      { question: "1. Apa tujuan utama dari Business Intelligence (BI)?", options: ["Meningkatkan hiburan pengguna", "Menganalisis data untuk mendukung pengambilan keputusan", "Menambah jumlah server", "Menghapus data perusahaan"], answer: 1 },
+      { question: "2. Data warehouse digunakan untuk…", options: ["Menyimpan dan mengintegrasikan data dari berbagai sumber", "Menghapus data lama", "Menjalankan game online", "Menyimpan file musik"], answer: 0 },
+      { question: "3. Contoh tools Business Intelligence yang populer adalah…", options: ["Tableau dan Power BI", "Photoshop dan Illustrator", "AutoCAD dan SketchUp", "Notepad dan Excel 2003"], answer: 0 },
+      { question: "4. Dalam analisis bisnis, istilah 'dashboard' berarti…", options: ["Antarmuka untuk menampilkan data visual secara interaktif", "Halaman login aplikasi", "Sistem keamanan jaringan", "Database relasional"], answer: 0 },
+      { question: "5. Manfaat utama analitik bisnis bagi perusahaan adalah…", options: ["Mengurangi kemampuan prediksi", "Membantu membuat keputusan berbasis data", "Meningkatkan biaya operasional", "Menghapus laporan keuangan"], answer: 1 },
+
+      // 🤖 Artificial Intelligence (AI)
+      { question: "6. Kecerdasan buatan (Artificial Intelligence) adalah…", options: ["Kemampuan mesin meniru kecerdasan manusia", "Teknologi untuk mempercepat mesin", "Komputer yang tidak bisa berpikir", "Alat untuk mencetak dokumen"], answer: 0 },
+      { question: "7. Contoh penerapan AI di kehidupan sehari-hari adalah…", options: ["Asisten virtual seperti Siri atau Google Assistant", "Kalkulator biasa", "Mesin ketik", "Jam analog"], answer: 0 },
+      { question: "8. Machine Learning merupakan bagian dari AI yang berfokus pada…", options: ["Kemampuan sistem belajar dari data tanpa pemrograman eksplisit", "Desain grafis", "Pembuatan website statis", "Manajemen jaringan"], answer: 0 },
+      { question: "9. Teknologi pengenalan wajah pada smartphone merupakan contoh dari…", options: ["Computer Vision", "Augmented Reality", "Blockchain", "Embedded System"], answer: 0 },
+      { question: "10. Salah satu risiko AI adalah…", options: ["Kesalahan etika dan bias dalam data", "Meningkatkan keamanan data", "Meningkatkan kerja manusia", "Menghapus teknologi digital"], answer: 0 },
+
+      // 🔧 Embedded System
+      { question: "11. Apa yang dimaksud dengan sistem tertanam (Embedded System)?", options: ["Sistem komputer yang dirancang untuk menjalankan satu fungsi khusus", "Program komputer untuk editing video", "Jaringan komputer global", "Aplikasi berbasis web"], answer: 0 },
+      { question: "12. Contoh perangkat yang menggunakan embedded system adalah…", options: ["Mesin cuci otomatis", "Laptop gaming", "PC desktop", "Smartphone tanpa OS"], answer: 0 },
+      { question: "13. Mikrokontroler seperti Arduino dan Raspberry Pi digunakan dalam…", options: ["Proyek embedded system", "Pembuatan game 3D", "Desain web", "Pengolahan teks"], answer: 0 },
+      { question: "14. Bahasa pemrograman yang sering digunakan dalam embedded system adalah…", options: ["C/C++", "HTML", "PHP", "CSS"], answer: 0 },
+      { question: "15. Ciri utama embedded system adalah…", options: ["Didesain untuk tugas tertentu dan terintegrasi dalam perangkat keras", "Dapat menjalankan berbagai aplikasi kompleks", "Selalu membutuhkan internet", "Menggunakan sistem operasi server"], answer: 0 },
+
+      // 💻 Sistem Operasi
+      { question: "16. Fungsi utama sistem operasi adalah…", options: ["Mengatur dan mengelola sumber daya komputer", "Menjalankan game", "Menambah kapasitas RAM", "Memperbanyak virus"], answer: 0 },
+      { question: "17. Contoh sistem operasi open-source adalah…", options: ["Linux", "Windows 11", "macOS", "iOS"], answer: 0 },
+      { question: "18. Kernel dalam sistem operasi berfungsi untuk…", options: ["Menjembatani perangkat keras dan perangkat lunak", "Menampilkan ikon di desktop", "Menjalankan aplikasi web", "Menghapus file sementara"], answer: 0 },
+      { question: "19. Sistem operasi mobile yang dikembangkan oleh Google adalah…", options: ["Android", "iOS", "HarmonyOS", "BlackBerry OS"], answer: 0 },
+      { question: "20. Proses multitasking dalam sistem operasi memungkinkan…", options: ["Menjalankan beberapa program secara bersamaan", "Menutup semua aplikasi", "Menghapus memori secara otomatis", "Menjalankan satu aplikasi saja"], answer: 0 }
+    ];
+
+    const quizForm = document.getElementById("quizForm");
+    questions.forEach((q, index) => {
+      const div = document.createElement("div");
+      div.className = "question";
+      div.innerHTML = `<h2>${q.question}</h2><div class="options">` +
+        q.options.map((opt, i) => `
+          <label>
+            <input type="radio" name="q${index}" value="${i}"/> ${opt}
+          </label>`).join("") +
+        `</div><div class="feedback" id="feedback${index}"></div>`;
+      quizForm.appendChild(div);
+    });
+
+    function submitQuiz() {
+      const answers = questions.map((_, i) =>
+        document.querySelector(`input[name="q${i}"]:checked`)
+      );
+
+      if (answers.includes(null)) {
+        alert("Silakan jawab semua soal terlebih dahulu!");
+        return;
+      }
+
+      let score = 0;
+      answers.forEach((ans, i) => {
+        const correct = questions[i].answer;
+        const feedbackEl = document.getElementById(`feedback${i}`);
+        const labels = document.querySelectorAll(`input[name="q${i}"]`);
+
+        labels.forEach(input => {
+          const label = input.closest("label");
+          label.classList.remove("correct", "incorrect");
+          if (parseInt(input.value) === correct) {
+            label.classList.add("correct");
+          }
+        });
+
+        if (parseInt(ans.value) === correct) {
+          score++;
+          feedbackEl.textContent = "✔ Benar";
+          feedbackEl.style.color = "green";
+        } else {
+          feedbackEl.textContent = `✖ Salah. Jawaban yang benar: ${questions[i].options[correct]}`;
+          feedbackEl.style.color = "red";
+          ans.closest("label").classList.add("incorrect");
+        }
+      });
+
+      const resultBox = document.getElementById("resultBox");
+      resultBox.style.display = "block";
+      resultBox.innerHTML = `<strong>Skor Kamu: ${score} / ${questions.length}</strong><br>Terus semangat belajar ya!`;
+
+      document.querySelector("button[onclick='submitQuiz()']").style.display = "none";
+      document.getElementById("retryBtn").style.display = "inline-block";
+    }
+  </script>
+</body>
+</html>
